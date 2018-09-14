@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>X-UA-Compatible</title>
+</head>
+<body>
+    <button id='download'>下载</button>
+    <button id='tojson'>xml转成json</button>
+    <button id='newDir'>新建文件夹</button>
+    <button id='upload'>移动文件</button>
+    <button id='toxml'>json转成xml</button>
+</body>
+<script>
+     let download=document.getElementById("download");
+     download.addEventListener("click",()=>{
+              let formData=new FormData();
+              var result=async()=>{
+                  let dd=await fetch('../ftp/download',{
+                    method:"post",
+                　  body:formData
+                  }).then((res)=>{
+                    return res.json().then(ret=>{alert(ret[0].msg)}).catch(ex=>{console.log("ex",ex)}) 
+                  })
+              }
+              result()
+         })
+     let tojson=document.getElementById("tojson");
+     tojson.addEventListener("click",()=>{
+              let formData=new FormData();
+              var result=async()=>{
+                  let dd=await fetch('../ftp/tojson',{
+                    method:"post",
+                　  body:formData
+                  }).then((res)=>{
+                    return res.json().then(ret=>{alert(ret[0].msg)}).catch(ex=>{console.log("ex",ex)}) 
+                  })
+              }
+              result()
+         })
+    let newDir=document.getElementById("newDir");
+    newDir.addEventListener("click",()=>{
+              let formData=new FormData();
+              var result=async()=>{
+                  let dd=await fetch('../ftp/newdir',{
+                    method:"post",
+                　  body:formData
+                  }).then((res)=>{
+                    return res.json().then(ret=>{alert(ret[0].msg)}).catch(ex=>{console.log("ex",ex)}) 
+                  })
+              }
+              result()
+         })
+    let upload=document.getElementById("upload");
+    upload.addEventListener("click",()=>{
+              let formData=new FormData();
+              var result=async()=>{
+                  let dd=await fetch('../ftp/upload',{
+                    method:"post",
+                　  body:formData
+                  }).then((res)=>{
+                    return res.json().then(ret=>{alert(ret[0].msg)}).catch(ex=>{console.log("ex",ex)}) 
+                  })
+              }
+              result()
+         })
+</script>
+</html>

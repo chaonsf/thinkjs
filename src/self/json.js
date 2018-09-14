@@ -1,0 +1,58 @@
+module.exports={
+    data:{
+        rootName:"been",
+        details:[
+             {
+                 localName:"A1",
+                 rename:"a1",
+                 parentNode:"been",
+                 ignoreFields:[],
+             },
+             {
+                 localName:"A2",
+                 rename:"",
+                 parentNode:"a1",
+                 relatedAttr:"id",
+                 ignoreFields:[
+                     {
+                         ignoreName:"d1"
+                     }
+                 ],
+                 countName:"",
+                 childarrayTitle:"sub3A"
+             },
+             {
+                 localName:"A3",
+                 rename:"",
+                 parentNode:"A2",
+                 relatedAttr:"sub_id",
+                 ignoreFields:[],
+                 countName:"A3Count",
+                 childarrayTitle:"subA2",
+                 addFields:[
+                     {
+                         addName:"huang",
+                         value:"duoduo",
+                     },
+                     {
+                         addName:"chao",
+                         value:"",
+                         path:"$.a1[0].name"
+
+                     }
+                 ]
+             },
+             {
+                localName:"A4",
+                rename:"",
+                parentNode:"been",
+                ignoreFields:[{
+                    ignoreName:"nmae"
+                }],
+
+            }
+
+        ]
+    }
+    
+}

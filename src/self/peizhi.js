@@ -1,0 +1,43 @@
+module.exports={
+    data:[
+        {
+            TB_NAME:"baseInfo",
+            parentNode:"root",
+            search_Node:"title",
+            fields:[],
+            clone:"1"
+        },
+        {
+            TB_NAME:"items",
+            parentNode:"items",
+            search_Node:"item",
+            fields:[
+                {
+                    type:"add",
+                    xpath:"//root/title/claim_no",
+                    columnName:""
+                  },
+            ],
+            clone:"1"
+        },
+        {
+            TB_NAME:"sub_item",
+            parentNode:"item",
+            search_Node:"sub_item",
+            fields:[
+                 {
+                    type:"add",
+                    xpath:"//root/title/claim_no",
+                    columnName:""
+                  },
+                  {
+                    type:"add",
+                    xpath:"../fid",
+                    columnName:""
+                  },
+            ],
+            clone:"1"
+        },
+
+    ]
+}
