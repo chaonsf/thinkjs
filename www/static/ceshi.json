@@ -1,0 +1,51 @@
+[
+    {
+        "DB_NAME":"DB1",
+        "TB_NAME":"baseInfo",
+        "datatable":[{
+              "claim_no":998,
+              "title":"我是头部"
+        }]
+    },
+    {
+        "DB_NAME":"DB1",
+        "TB_NAME":"items",
+        "datatable":[
+            {
+                "fid": "1", 
+                "a1": "你好",
+                "b1": "hahah1",
+                "c1" : "cccc1",
+                "claim_no" :"998"
+            },{
+                "fid": "2", 
+                "a1": "你好2",
+                 "b1": "hahah2",
+                 "c1" : "cccc2", 
+                 "claim_no": "998"
+            },
+            {
+                "fid": "3", 
+                 "a1": "你好3",
+                  "b1": "hahah3", 
+                  "c1": "cccc3", 
+                  "claim_no": "998"
+            }
+        ]
+    },
+    {
+        "DB_NAME":"DB1",
+        "TB_NAME":"items",
+        "datatable":[
+            {
+                "name": "林俊杰", "claim_no": "998", "fid": "1"
+            },
+            {
+                "name": "邵佳一", "claim_no": "998", "fid": "2"
+            },
+            {
+                "name": "阿里巴巴", "claim_no": "998", "fid": "3"
+            }
+        ] 
+    }
+]

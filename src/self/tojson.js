@@ -7,7 +7,6 @@ module.exports = class  {
     }
     //运行入口
     invoke(data){
-       
         let doc=new xmldom().parseFromString(data);
         let postData=[];
         let xml=this.cfg;
@@ -19,7 +18,7 @@ module.exports = class  {
               path="//"+selectValue.search_Node
             }
             postData.push({
-              DB_NAME:"DB1",
+              DB_NAME:selectValue.DB_NAME,
               TB_NAME:selectValue.TB_NAME,
               datatable:[]
             })
@@ -54,26 +53,34 @@ module.exports = class  {
     _existsAdd(data,fields,doc){
         for(let t=0;t<fields.length;t++){
             if(fields[t].type=="add"){
-                let elementData=xpath.select(fields[t].xpath,doc)[0]
+            let addData=xpath.select(fields[t].xpath,doc);
+            if(addData){
+            let elementData=addData[0]
             let fieldName=elementData.nodeName;
              let value=elementData.textContent;
-            if(fields[t].columnName){
+             if(fields[t].columnName){
              let name=fields[t].columnName;
               data[name]=value
-             }else{
+               }else{
                data[fieldName]=value;
-             }
-
+              }
+            }else{
+                let typeName=fields[t].columnName;
+                data[typeName]=""
+            }
              
             }
         }
     }
+    //y代表当前循环到的那条配置数据
     mainCycle(y,path,doc){
         let childArr=[];
         let fields=y.fields;
         let  elementNode=xpath.select(path,doc);
         for(let k=0;k<elementNode.length;k++){
-            let nodechilds=elementNode[k].childNodes;
+            //let nodechilds=elementNode[k].childNodes;
+             let currectData=elementNode[k];
+             let nodechilds=currectData.childNodes;
             let t={};
             if(y.clone==1){
              for(let j=0;j<nodechilds.length;j++){
@@ -87,14 +94,25 @@ module.exports = class  {
                        }      
                  }
              }
-             
+              this._rename(t,fields,currectData);
             }
-            let dd=elementNode[k];
-            this._existsAdd(t,fields,dd);
-           // this._existsAdd(t,fields,doc) ;
+            this._existsAdd(t,fields,currectData);
             childArr.push(t)
         }
         return childArr
+    }
+    //直接改名的字段
+    _rename(data,fields,doc){
+        for(let t=0;t<fields.length;t++){
+            if(fields[t].type=='rename'){
+                let elementData=xpath.select(fields[t].xpath,doc)[0];
+                let value=elementData.textContent;
+                let fieldName=elementData.nodeName;
+               let name=fields[t].columnName;
+                data[name]=value;
+                delete data[fieldName]
+            }
+        }
     }
 
 }

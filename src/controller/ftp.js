@@ -5,20 +5,18 @@ const xmlpeizhi=require('../self/peizhi');
 const tojson=require('../self/tojson');
 const toxml=require('../self/toXml');
 const path=require('path');
-const jsonPeizhi=require('../self/json');
+const jsonPeizhi=require('../self/toxmlPeizhi');
 
 module.exports = class extends Base {
     async downloadAction(){
         if(this.isPost){
-            let arr=await common.download('./ftp_test');
-            console.log(arr)
-            common.dirlist=arr;
-            this.json([{msg:"下载成功"}])
+           let obj=await common.start('./ftp_test');
+            this.json(obj)
         }
     }
     async tojsonAction(){
         if(this.isPost){
-            let arr;
+           /*  let arr;
             if(common.dirlist){
                 arr=common.dirlist
             }else{
@@ -33,7 +31,15 @@ module.exports = class extends Base {
                 let data=await common.readFile("/www/download/"+name);
                 let postData=toJson.invoke(data);
                 console.log(postData)
-            }
+                console.log(postData[0]);
+                console.log(postData[1])
+                console.log(postData[2])
+            } */
+            let json=await think.readXml('/www/static/ceshi.json');
+            let shuju=JSON.parse(json);
+            let peizhi=jsonPeizhi.data;
+            let Toxml=new toxml(peizhi);
+           let a= Toxml.start(shuju);
             this.json([{msg:"转译成功"}])
         }
     }
@@ -50,12 +56,11 @@ module.exports = class extends Base {
             let arr=common.dirlist?common.dirlist:await common.catalog('./ftp_test');
             for(let i=0;i<arr.length;i++){
                 let name=path.basename(arr[i],'.xml')
-                let localPath=think.ROOT_PATH+"/www/download/"+arr[i];
                 let time=common.time()
                 let remotePath='./ftp_test/newAdd/'+name+"_backup_"+time+".xml"
-                  let dd=await common.upload(localPath,remotePath)
-                  let deleteFile=await common.deleteFile('./ftp_test/'+arr[i])
+                let aa=await common.yidong('./ftp_test/'+arr[i],remotePath)
             }
+
             this.json([{msg:'移动文件成功'}])
         }
     }

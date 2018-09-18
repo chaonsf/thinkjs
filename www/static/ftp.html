@@ -7,7 +7,7 @@
     <title>X-UA-Compatible</title>
 </head>
 <body>
-    <button id='download'>下载</button>
+    <button id='download'>ftp操作，转化成json</button>
     <button id='tojson'>xml转成json</button>
     <button id='newDir'>新建文件夹</button>
     <button id='upload'>移动文件</button>
@@ -22,7 +22,7 @@
                     method:"post",
                 　  body:formData
                   }).then((res)=>{
-                    return res.json().then(ret=>{alert(ret[0].msg)}).catch(ex=>{console.log("ex",ex)}) 
+                    return res.json().then(ret=>{console.log(ret)}).catch(ex=>{console.log("ex",ex)}) 
                   })
               }
               result()

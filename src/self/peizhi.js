@@ -2,13 +2,20 @@ module.exports={
     data:[
         {
             TB_NAME:"baseInfo",
+            DB_NAME:"DB1",
             parentNode:"root",
             search_Node:"title",
-            fields:[],
+            fields:[{
+                 type:"rename",
+                 xpath:'//root/title/h1',
+                 columnName:"title"
+             }
+           ],
             clone:"1"
         },
         {
             TB_NAME:"items",
+             DB_NAME:"DB1",
             parentNode:"items",
             search_Node:"item",
             fields:[
@@ -22,6 +29,7 @@ module.exports={
         },
         {
             TB_NAME:"sub_item",
+            DB_NAME:"DB1",
             parentNode:"item",
             search_Node:"sub_item",
             fields:[
