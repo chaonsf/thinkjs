@@ -33,7 +33,17 @@ module.exports = [
   },
   {
     handle: 'router',
-    options: {}
+    options: {
+      defaultModule:'',
+      defaultController: 'index',
+      defaultAction: 'ftp',
+      prefix: [],
+      suffix: ['.html'],
+      enableDefaultRouter: true,
+      subdomainOffset: 2,
+      subdomain: {},
+      denyModules: []
+    }
   },
   'logic',
   'controller'

@@ -8,10 +8,9 @@
 </head>
 <body>
     <button id='download'>ftp操作，转化成json</button>
-    <button id='tojson'>xml转成json</button>
-    <button id='newDir'>新建文件夹</button>
-    <button id='upload'>移动文件</button>
-    <button id='toxml'>json转成xml</button>
+    <button id='tojson'>json转成xml</button>
+    <button id='mail'>mail</button>
+   
 </body>
 <script>
      let download=document.getElementById("download");
@@ -40,28 +39,15 @@
               }
               result()
          })
-    let newDir=document.getElementById("newDir");
-    newDir.addEventListener("click",()=>{
+        let mail=document.getElementById("mail");
+        mail.addEventListener("click",()=>{
               let formData=new FormData();
               var result=async()=>{
-                  let dd=await fetch('../ftp/newdir',{
+                  let dd=await fetch('../ftp/mail',{
                     method:"post",
                 　  body:formData
                   }).then((res)=>{
-                    return res.json().then(ret=>{alert(ret[0].msg)}).catch(ex=>{console.log("ex",ex)}) 
-                  })
-              }
-              result()
-         })
-    let upload=document.getElementById("upload");
-    upload.addEventListener("click",()=>{
-              let formData=new FormData();
-              var result=async()=>{
-                  let dd=await fetch('../ftp/upload',{
-                    method:"post",
-                　  body:formData
-                  }).then((res)=>{
-                    return res.json().then(ret=>{alert(ret[0].msg)}).catch(ex=>{console.log("ex",ex)}) 
+                    return res.json().then(ret=>{alert(ret)}).catch(ex=>{console.log("ex",ex)}) 
                   })
               }
               result()

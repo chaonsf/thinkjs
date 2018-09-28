@@ -1,4 +1,4 @@
-const xpath=require("xpath")
+//const xpath=require("xpath")
 const xmldom=require("xmldom").DOMParser;
 const xml2js=require("xml2js")
 const jsonPath=require("advanced-json-path");
@@ -13,30 +13,14 @@ module.exports=class {
         let peizhi=this.cfg;
         let detail=peizhi.details;
         let renameData=this.renameDetail(data,detail);
-      for(let i=0;i<detail.length;i++){
-            let child=detail[i];
-           // renameData=this.ignoreJson(child,renameData)
-            if(child.relatedAttr){
-                renameData=this.relatedAttr(renameData,child)
-            }
-            renameData=this.ignoreJson(child,renameData)
-            renameData=this.childNodeRename(child,renameData)
-        }
+        renameData=this.operation(detail,renameData);
         renameData=this.deleteItem(peizhi,detail,renameData)
-        renameData=this.addparentNode(detail,renameData)
-        let jsonBuilder = new xml2js.Builder({
-            rootName:peizhi.rootName,
-            xmldec:{
-                version:'1.0',
-                'encoding': 'utf-8',
-                'standalone': false}})    
-        let  json2xml = jsonBuilder.buildObject(renameData);
-       let doc=new xmldom().parseFromString(json2xml);
-       let xxml=doc.toString() 
-       console.log(xxml)
+        renameData=this.addparentNode(detail,renameData);
+       let xxml=this.toxml(peizhi,renameData)
+      // console.log(xxml)
         return xxml;
-      
      }
+     //大的父节点的重命名
      renameDetail(data,detail){
          let newObject={}
         for(let i=0;i<detail.length;i++){
@@ -53,10 +37,10 @@ module.exports=class {
         }
        return newObject
      }
-     //jsonPath
      ignoreJson(child,renameData){
-        for(let j=0;j<child.ignoreFields.length;j++){
-            let grandson=child.ignoreFields[j];
+        for(let j=0;j<child.Fields.length;j++){
+            let grandson=child.Fields[j];
+            if(grandson.type=='ignore'){
             let path=child.localName
             if(child.rename){
                path=child.rename
@@ -66,9 +50,11 @@ module.exports=class {
                 for(let t=0;t<result.length;t++){
                     delete renameData[path][t][grandson.ignoreName]
                 }
-            }else{
+             }else{
                 delete renameData[path][grandson.ignoreName]
+             }
             }
+            
         }
         return renameData
      }
@@ -87,6 +73,7 @@ module.exports=class {
         }
         return renameData
      }
+     //删除掉父节点不是根节点的数据
      deleteItem(peizhi,detail,renameData){
         for(let i=0;i<detail.length;i++){
             let child=detail[i];
@@ -100,6 +87,7 @@ module.exports=class {
         }
         return renameData
      }
+     //count和在外包一个节点
      childarrayTitle(child,relateId,renameData,selected){
         let path="$."+child.localName+"[?(@."+child.relatedAttr+"=="+relateId+")]";
         let name=child.localName
@@ -118,16 +106,17 @@ module.exports=class {
            count=0
        }
         if(child.childarrayTitle){
-            if(child.addFields){
-                for(let k=0;k<child.addFields.length;k++){
-                    let item=child.addFields[k];
-                     obj[item.addName]=item.value
-                    if(item.path){
+             for(let k=0;k<child.Fields.length;k++){
+                 let item=child.Fields[k];
+                 if(item.type=='add'){
+                      obj[item.addName]=item.value;
+                      if(item.path){
                         let value=jsonPath(renameData,item.path);
+                        console.log(value)
                         obj[item.addName]=value;
                     } 
-                }
-            }
+                 }
+             }
             if(child.countName){
              obj[child.countName]=count
             }
@@ -145,12 +134,12 @@ module.exports=class {
         }
         return selected
      }
+     //小的子节点重命名
      childNodeRename(child,renameData){
-         for(let i=0;i<child.ignoreFields.length;i++){
-              let grandson=child.ignoreFields[i];
+         for(let i=0;i<child.Fields.length;i++){
+              let grandson=child.Fields[i];
               if(grandson.type=='rename'){
                   let result=jsonPath(renameData,grandson.path);
-                  console.log('result:',result)
                   if(Object.prototype.toString.call(result)==='[object Array]'){
                       for(let t=0;t<result.length;t++){
                             let childselect=result[t];
@@ -166,6 +155,7 @@ module.exports=class {
          }
          return renameData
      }
+     //在最外面追加一个父节点
      addparentNode(detail,renameData){
           for(let i=0;i<detail.length;i++){
               let child=detail[i];
@@ -173,16 +163,38 @@ module.exports=class {
                      let name=child.rename?child.rename:child.localName;
                      let parentNode=child.addparentNode;
                     let selectdata=jsonPath(renameData,"$."+name);
-                    think.logger.info("sele:",selectdata);
+                   // think.logger.info("sele:",selectdata);
                     let t={}
                     t[name]=selectdata;
                      renameData[parentNode]=t;
-                     think.logger.debug("ree:",renameData);
+                   //  think.logger.debug("ree:",renameData);
                      delete renameData[name]
               }
           }
         return renameData  
          
      }
-
+     operation(detail,renameData){
+        for(let i=0;i<detail.length;i++){
+              let child=detail[i];
+            if(child.relatedAttr){
+                renameData=this.relatedAttr(renameData,child)
+            }
+            renameData=this.ignoreJson(child,renameData)
+            renameData=this.childNodeRename(child,renameData)
+          }
+        return renameData  
+     }
+     toxml(peizhi,renameData){
+        let jsonBuilder = new xml2js.Builder({
+            rootName:peizhi.rootName,
+            xmldec:{
+                version:'1.0',
+                'encoding': 'utf-8',
+                'standalone': false}})    
+        let  json2xml = jsonBuilder.buildObject(renameData);
+       let doc=new xmldom().parseFromString(json2xml);
+       let xxml=doc.toString();
+       return xxml
+     }
 }

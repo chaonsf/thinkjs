@@ -3,27 +3,31 @@ module.exports={
         {
             TB_NAME:"baseInfo",
             DB_NAME:"DB1",
-            parentNode:"root",
-            search_Node:"title",
+            parentNode:"root",//父节点
+            searchNode:"title",//搜索的节点
             fields:[{
-                 type:"rename",
-                 xpath:'//root/title/h1',
-                 columnName:"title"
-             }
+                 type:"rename", //分三种，rename add ignore
+                 xpath:'//root/title/h1',//路径
+                 columnName:"title" //重命名
+              }
            ],
-            clone:"1"
+            clone:"1" //是否克隆，1为克隆，0 为不克隆
         },
         {
             TB_NAME:"items",
-             DB_NAME:"DB1",
+            DB_NAME:"DB1",
             parentNode:"items",
-            search_Node:"item",
+            searchNode:"item",
             fields:[
-                {
+                 {
                     type:"add",
                     xpath:"//root/title/claim_no",
                     columnName:""
                   },
+                  {
+                    type:"ignore",
+                    fieldName:"b1"//忽略的字段
+                  }
             ],
             clone:"1"
         },
@@ -31,7 +35,7 @@ module.exports={
             TB_NAME:"sub_item",
             DB_NAME:"DB1",
             parentNode:"item",
-            search_Node:"sub_item",
+            searchNode:"sub_item",
             fields:[
                  {
                     type:"add",
