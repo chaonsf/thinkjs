@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>正则</title>
+</head>
+<body>
+    
+</body>
+<script>
+     let text='您好！方案代码(2018D000000000002753)下有了新的保单。保单号：6030110102820180000001,保额 ：11000.0000, 保费 ： 588.0000，签单日期：2018-09-21 10:33:29，保险起期：2018-09-22 00:00:00，保险止期：2019-09-21 23:59:59，投保人姓名：杨秋鈅，投保人证件类型：身份证，投保人证件号码：510322199410142120，投保人性别：女，投保人出生日期：1994-10-14，投保人电话：17862926759，被保人姓名：杨秋鈅，被保人证件类型：身份证，被保人证件号码：510322199410142120，被保人性别：女，被保人出生日期：1994-10-14';
+    let re=/(保单号：)(\w+?),/g
+     let re2=/(投保人证件号码：)(\w+?)，/g
+     let re3=/(保险起期：)(.*?)，/g
+     let re4=/(保险止期：)(.*?)，/g
+     let re5=/(被保人姓名：)(.*?)，/g
+     let re6=/(投保人电话：)(.*?)，/g
+    
+    console.log(re.exec(text)[2])
+    console.log(re2.exec(text)[2])
+    console.log(re3.exec(text)[2])
+    console.log(re4.exec(text)[2])
+    console.log(re5.exec(text)[2])
+    console.log(re6.exec(text)[2])
+    
+      /*  let re=/保单号(\s+：|：|\s+：\s+|：\s+)\w+/g
+      let re2=/投保人证件号码(\s+：|：|\s+：\s+|：\s+)\w+/g
+      let re3=/保险起期(\s+：|：|\s+：\s+|：\s+)\d{4}(-\d{2})+\s+(\d{2}:)+\d{2}/g
+      let re4=/保险止期(\s+：|：|\s+：\s+|：\s+)\d{4}(-\d{2})+\s+(\d{2}:)+\d{2}/g
+      let re5=/被保人姓名(\s+：|：|\s+：\s+|：\s+)[\u4e00-\u9fa5|A-z]{1,}/g
+      let re6=/投保人电话(\s+：|：|\s+：\s+|：\s+)(\d{1,}-\d{1,}|\d{11})/g
+      let bb=text.match(re);
+      let cc=text.match(re2)
+      let dd=text.match(re3)
+      let ee=text.match(re4)
+      let ff=text.match(re5)
+      let gg=text.match(re6) */
+</script>
+</html>
