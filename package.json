@@ -15,6 +15,7 @@
     "imap": "^0.8.19",
     "log4js": "^3.0.5",
     "mailparser": "^2.3.4",
+    "memory-cache": "^0.2.0",
     "nodemailer": "^4.6.8",
     "smtp-server": "^3.4.7",
     "think-cache": "^1.0.0",

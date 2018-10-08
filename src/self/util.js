@@ -2,7 +2,7 @@ const Imap=require("imap");
 const  MailParser = require("mailparser").MailParser
 let config=require('./mailConfig').config
 
-module.exports= class{
+module.exports= class readMail{
   constructor(cfg) {
     this.cfg = cfg;
     }
@@ -11,7 +11,8 @@ module.exports= class{
         let imap=new Imap(this.cfg)
         this.imap=imap;
          imap.once('ready',()=>{
-              let arr=[]
+              let arr=[];
+              let count=0;
            this.openInbox((err,box)=>{
                   if(err) throw err;
                   console.log(box)
@@ -20,7 +21,7 @@ module.exports= class{
                        if(results.length==0){
                           resolve(arr)
                        }
-                       let f=imap.fetch(results, { bodies: '',markSeen:true });
+                       let f=imap.fetch(results, { bodies: '',markSeen:true});
                        f.on('message',(msg, seqno)=>{
                          var mailparser = new MailParser();
                          msg.on("body",(stream, info)=>{
@@ -28,8 +29,14 @@ module.exports= class{
                                mailparser.on('data',(data)=>{
                                  if (data.type === 'text') {
                                      let obj=this.grab(data.html);
-                                    arr.push(obj)
-                                     if(arr.length==results.length){
+                                     if(obj!=1){
+                                       arr.push(obj)
+                                     }else{
+                                       ++count
+                                     }
+
+                                     if(arr.length+count==results.length){
+                                       console.log(count)
                                         resolve(arr)
                                      }
                                    }   
@@ -69,21 +76,33 @@ module.exports= class{
       let re3=/(保险起期：)(.*?)，/g;
       let re4=/(保险止期：)(.*?)，/g;
       let re5=/(被保人姓名：)(.*?)，/g
-      let re6=/(投保人电话：)(.*?)，/g
-      let policyId=re.exec(text)[2];
-      let applicantName=re2.exec(text)[2];
-      let startInsurance=re3.exec(text)[2];
-      let endInsurance=re4.exec(text)[2];
-      let recognizeeName=re5.exec(text)[2];
-      let recognizeePhone=re6.exec(text)[2];
-      let obj={
-          "保单号":policyId,
-          "投保人证件号码":applicantName,
-          "保险起期":startInsurance,
-          "保险止期":endInsurance,
-          "被保人姓名":recognizeeName,
-          "投保人电话":recognizeePhone
-       }
+      let re6=/(投保人电话：)(\d{1,}-\d{1,}|\d{2,}?)，/g
+      let obj;
+      let policyIds=re.exec(text);
+      let applicantNames=re2.exec(text)
+      let startInsurances=re3.exec(text)
+      let endInsurances=re4.exec(text)
+      let recognizeeNames=re5.exec(text)
+      let recognizeePhones=re6.exec(text)
+      if(policyIds&&applicantNames&&startInsurances&&endInsurances&&recognizeeNames&&recognizeePhones){
+           let policyId=policyIds[2];
+          let applicantName=applicantNames[2];
+          let startInsurance=startInsurances[2];
+          let endInsurance=endInsurances[2];
+          let recognizeeName=recognizeeNames[2];
+          let recognizeePhone=recognizeePhones[2];
+          obj={
+            "保单号":policyId,
+            "投保人证件号码":applicantName,
+            "保险起期":startInsurance,
+            "保险止期":endInsurance,
+            "被保人姓名":recognizeeName,
+            "投保人电话":recognizeePhone
+         }
+      }else{
+         console.log("我没有找到");
+          obj=1
+      }
       return obj
     }
    

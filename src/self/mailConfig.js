@@ -7,5 +7,7 @@ module.exports={
         tls: true, //使用安全传输协议
         debug: console.log,
         tlsOptions: { rejectUnauthorized: false } //禁用对证书有效性的检查
-     }
+     },
+     TB_Name:"sales",
+     SP_Name:"sale"
 }
